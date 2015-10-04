@@ -11,3 +11,4 @@ while True:
     key = pygame.key.get_pressed()
     if(key[pygame.K_a]) : pygame.display.toggle_fullscreen()
     if(key[pygame.K_q]) : sys.exit()
+    # Testimiseks, a paneb fullscreen, q - quit
