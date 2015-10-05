@@ -9,7 +9,7 @@ print(map)
 pygame.init()
 displayInfo = pygame.display.Info()
 screen = pygame.display.set_mode((displayInfo.current_w, displayInfo.current_h))
-pygame.display.set_caption("Grand Theft Python")  # Akna nimesilt
+pygame.display.set_caption("Grand Theft Python")  # Akna nimesilt.
 screen.fill(textures.purple)
 pygame.display.flip()
 
