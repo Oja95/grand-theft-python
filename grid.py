@@ -1,3 +1,6 @@
+tileSize = 15
+import pygame
+import textures
 def getGrid(filename):
     f = open(filename)
     grid = f.read()
@@ -7,3 +10,9 @@ def getGrid(filename):
     for line in grid:
         newGrid.append(list(line))
     return newGrid
+
+
+def drawGridTile(x,y,screen,tileSize,color,display=False):
+    tile = pygame.Rect(x*tileSize,y*tileSize,tileSize,tileSize)
+    pygame.draw.rect(screen,color,tile)
+    
