@@ -1,4 +1,4 @@
-tileSize = 15
+tileSize = 25
 import pygame
 import textures
 def getGrid(filename):
