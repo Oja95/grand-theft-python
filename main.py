@@ -4,21 +4,23 @@ import textures
 import random
 import grid
 map = grid.getGrid("grid.txt")
-print(map)
+
 
 pygame.init()
 displayInfo = pygame.display.Info()
 screen = pygame.display.set_mode((displayInfo.current_w, displayInfo.current_h))
-screen = pygame.display.set_mode((600,800))
 screen.fill(textures.purple)
 pygame.display.flip()
 
+#startpos
+pxpos = 500*grid.tileSize//2
+pypos = 500*grid.tileSize//2
+
+
 
 #katsetused gridi joonistamiseks, AJUTINE
-for i in range((displayInfo.current_w)//grid.tileSize):
-    for j in range((displayInfo.current_h)//grid.tileSize):
-        grid.drawGridTile(i,j,screen,grid.tileSize,[random.randint(0,255),random.randint(0,255),random.randint(0,255)],True)
-pygame.display.flip()
+
+checkers = grid.genCheckers()
 
 
 Exit = False
@@ -37,13 +39,23 @@ while not Exit:
     key = pygame.key.get_pressed()
     if key[pygame.K_w]:
         y-=1
-    elif key[pygame.K_a]:
-        x-=1
     elif key[pygame.K_s]:
         y+=1
+    if key[pygame.K_a]:
+        x-=1
     elif key[pygame.K_d]:
         x+=1
-    screen.scroll(x,y)
+    for i in range((displayInfo.current_w)//grid.tileSize):
+        for j in range((displayInfo.current_h)//grid.tileSize):
+            if checkers[i+x//grid.tileSize][j+y//grid.tileSize] == 0:
+                grid.drawGridTile(i*grid.tileSize+x%grid.tileSize,j*grid.tileSize+y%grid.tileSize,screen,grid.tileSize,textures.black)
+            else:
+                grid.drawGridTile(i*grid.tileSize+x%grid.tileSize,j*grid.tileSize+y%grid.tileSize,screen,grid.tileSize,textures.white)
     pygame.display.flip()
-    x,y=0,0
+"""
+screen.scroll(x,y)
+pygame.display.flip()
+x,y=0,0
+"""
+
 pygame.quit()
