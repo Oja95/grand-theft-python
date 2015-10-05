@@ -43,16 +43,17 @@ while not Exit:
         x -= 5
 
 
-    for i in range((displayInfo.current_w) // grid.tileSize):
-        for j in range((displayInfo.current_h) // grid.tileSize):
-            if checkers[i + x // grid.tileSize][j + y // grid.tileSize] == 0:
-                grid.drawGridTile(i * grid.tileSize + x % grid.tileSize, j * grid.tileSize + y % grid.tileSize,screen, grid.tileSize, textures.silver)
+    x+=1
+    for i in range((displayInfo.current_w)//grid.tileSize+4):
+        for j in range((displayInfo.current_h)//grid.tileSize+4):
+            if checkers[i+x//grid.tileSize][j+y//grid.tileSize] == 0:
+                grid.drawGridTile(i*grid.tileSize+x%grid.tileSize-2*grid.tileSize,j*grid.tileSize+y%grid.tileSize-2*grid.tileSize,screen,grid.tileSize,textures.black)
             else:
-                grid.drawGridTile(i * grid.tileSize + x % grid.tileSize, j * grid.tileSize + y % grid.tileSize,screen, grid.tileSize, textures.white)
+                grid.drawGridTile(i*grid.tileSize+x%grid.tileSize-2*grid.tileSize,j*grid.tileSize+y%grid.tileSize-2*grid.tileSize,screen,grid.tileSize,textures.white)
 
     # Player model ekraani keskele.
     playerModel = pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 50, 50)
-    pygame.draw.rect(screen, textures.black, playerModel)
+    pygame.draw.rect(screen, textures.green, playerModel)
 
     pygame.display.flip()
 """
