@@ -23,7 +23,7 @@ def genCheckers():
     for i in range(500):
         newCheckers.append([])
         for j in range(500):
-            if i%2==0 and j%2==0:
+            if i%2==0 or j%2==0:
                 newCheckers[i].append(1)
             else:
                 newCheckers[i].append(0)

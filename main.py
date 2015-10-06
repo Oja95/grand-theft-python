@@ -43,7 +43,6 @@ while not Exit:
         x -= 5
 
 
-    x += 1
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
         for j in range((displayInfo.current_h)//grid.tileSize + 4):
             if checkers[i + x // grid.tileSize][j + y // grid.tileSize] == 0:
