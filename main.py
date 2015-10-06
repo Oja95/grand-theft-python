@@ -46,10 +46,12 @@ while not Exit:
 
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
         for j in range((displayInfo.current_h)//grid.tileSize + 4):
+            X = (i-2) * grid.tileSize + x % grid.tileSize
+            Y = (j-2) * grid.tileSize + y % grid.tileSize
             if checkers[i + x // grid.tileSize][j + y // grid.tileSize] == 0:
-                grid.drawGridTile(i * grid.tileSize + x % grid.tileSize - 2 * grid.tileSize, j * grid.tileSize + y % grid.tileSize - 2 * grid.tileSize, screen, grid.tileSize, textures.black)
+                grid.drawGridTile(X, Y, screen, grid.tileSize, textures.black)
             else:
-                grid.drawGridTile(i * grid.tileSize + x % grid.tileSize - 2 * grid.tileSize, j * grid.tileSize + y % grid.tileSize - 2 * grid.tileSize, screen, grid.tileSize, textures.white)
+                grid.drawGridTile(X, Y, screen, grid.tileSize, textures.white)
 
     # Player model ekraani keskele.
     playerModel = pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 50, 50)
