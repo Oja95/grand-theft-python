@@ -44,6 +44,7 @@ while not Exit:
         x -= 5
 
 
+
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
         for j in range((displayInfo.current_h)//grid.tileSize + 4):
             X = (i-2) * grid.tileSize + x % grid.tileSize
@@ -54,7 +55,7 @@ while not Exit:
                 grid.drawGridTile(X, Y, screen, grid.tileSize, textures.white)
 
     # Player model ekraani keskele.
-    playerModel = pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 50, 50)
+    playerModel = pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 30, 20)
     pygame.draw.rect(screen, textures.green, playerModel)
 
     pygame.display.flip()

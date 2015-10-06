@@ -1,6 +1,6 @@
 
 #Var tileSize hold the current tile size, used in rendering
-tileSize = 30
+tileSize = 73
 import pygame
 import textures
 def getGrid(filename):
