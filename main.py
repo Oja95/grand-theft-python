@@ -3,6 +3,7 @@ import sys
 import textures
 import random
 import grid
+import time
 
 # map = grid.getGrid("grid.txt")
 
@@ -22,7 +23,7 @@ Exit = False
 x = 0
 y = 0
 while not Exit:
-    #Esc viskab pygamest välja
+    startTime = time.time()
     for i in pygame.event.get():
         if i.type == pygame.QUIT:
             Exit = True
@@ -43,7 +44,6 @@ while not Exit:
         x -= 5
 
 
-    x += 1
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
         for j in range((displayInfo.current_h)//grid.tileSize + 4):
             if checkers[i + x // grid.tileSize][j + y // grid.tileSize] == 0:
@@ -56,6 +56,9 @@ while not Exit:
     pygame.draw.rect(screen, textures.green, playerModel)
 
     pygame.display.flip()
+
+    endTime = time.time()
+    print(1/(endTime-startTime))
 """
 screen.scroll(x,y)
 pygame.display.flip()
