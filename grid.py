@@ -1,8 +1,11 @@
 
 #Var tileSize hold the current tile size, used in rendering
-tileSize = 73
+tileSize = 50
+
+from PIL import Image
 import pygame
 import textures
+
 def getGrid(filename):
     f = open(filename)
     grid = f.read()
@@ -29,7 +32,27 @@ def genCheckers():
                 newCheckers[i].append(0)
     return newCheckers
 
+def getPixelsFromImage(file):
+    im = Image.open(file, 'r')
+    width, height = im.size
+    pixel_values = list(im.getdata())
+    pixelList = []
+    aPixel = []
+    for i in range(width*height):
+        for j in range(3):
+            aPixel.append(pixel_values[i][j])
+        pixelList.append(aPixel)
+        aPixel = []
+    # Pikslid vaja saada 2d arraysse width * height
+    pixel2dList = []
+    counter = 0
+    for i in range(width):
+        pixel2dList.append([])
+        for j in range(height):
+            pixel2dList[i].append(pixelList[counter])
+            counter += 1
+    f = open("maptxt.txt", "w")
+    f.write(str(pixel2dList))
 
-
-
+    return pixel2dList
 
