@@ -38,6 +38,8 @@ def getPixelsFromImage(file):
     pixel_values = list(im.getdata())
     pixelList = []
     aPixel = []
+    width = 2
+    height = 3
     for i in range(width*height):
         for j in range(3):
             aPixel.append(pixel_values[i][j])
@@ -55,4 +57,4 @@ def getPixelsFromImage(file):
     f.write(str(pixel2dList))
 
     return pixel2dList
-
+getPixelsFromImage("map.tiff")

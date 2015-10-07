@@ -5,8 +5,6 @@ import random
 import grid
 import time
 
-# map = grid.getGrid("grid.txt")
-
 pygame.init()
 displayInfo = pygame.display.Info()
 screen = pygame.display.set_mode((displayInfo.current_w, displayInfo.current_h))
@@ -16,6 +14,7 @@ pygame.display.flip()
 
 # Monitor info:
 print(displayInfo.current_w, displayInfo.current_h)
+# Loeme pildifailist pikslid
 
 checkers = grid.genCheckers()
 
