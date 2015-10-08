@@ -3,13 +3,18 @@ import pygame
 import textures
 
 #Var tileSize hold the current tile size, used in rendering
-tileSize = 30
+tileSize = 50
 
 #Draws one grid tile at coordinates, on var=screen with color
-def drawGridTile(x,y,screen,tileSize,color):
+
+def genTile(x,y,tileSize):
     tile = pygame.Rect(x,y,tileSize,tileSize)
+    return tile
+def drawGridTile(screen,color,tile):
     pygame.draw.rect(screen,color,tile)
-    
+
+
+
 def genCheckers():
     newCheckers = []
     for i in range(500):
