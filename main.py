@@ -43,20 +43,22 @@ while not Exit:
     elif key[pygame.K_d]:
         x += 1
 
+    playerModel = pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 30 ,30 )
+    #Current render engine
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
         for j in range((displayInfo.current_h)//grid.tileSize + 4):
             X = (i-2) * grid.tileSize + x % grid.tileSize
             Y = (j-2) * grid.tileSize + y % grid.tileSize
+            tile = grid.genTile(X,Y,grid.tileSize)
             if checkers[i + x ][j + y] == [0, 0, 0]:
-                grid.drawGridTile(X, Y, screen, grid.tileSize, textures.black)
+                grid.drawGridTile(screen,textures.black,tile)
             elif checkers[i + x ][j + y] == [255, 255, 255]:
-                grid.drawGridTile(X, Y, screen, grid.tileSize, textures.white)
+                grid.drawGridTile(screen,textures.white,tile)
             else:
-                grid.drawGridTile(X, Y, screen, grid.tileSize, textures.green)
+                grid.drawGridTile(screen,textures.green,tile)
 
     # Player model ekraani keskele.
 
-    playerModel = pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 30 ,30 )
     pygame.draw.rect(screen, textures.blue, playerModel)
 
     pygame.display.flip()
