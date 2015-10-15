@@ -3,7 +3,7 @@ import pygame
 import textures
 
 #Var tileSize hold the current tile size, used in rendering
-tileSize = 50
+tileSize = 3
 
 #Draws one grid tile at coordinates, on var=screen with color
 
@@ -41,9 +41,9 @@ def getPixelsFromImage(file):
 
     pixel2dList = []
     counter = 0
-    for i in range(height):
+    for i in range(width):
         pixel2dList.append([])
-        for j in range(width):
+        for j in range(height):
             pixel2dList[i].append(pixelList[counter])
             counter += 1
     return pixel2dList
