@@ -13,7 +13,7 @@ print(displayInfo.current_w,displayInfo.current_h)
 # Loeme pildifailist pikslid
 
 #checkers = grid.genCheckers()
-map = grid.getPixelsFromImage("dickbutt.tif")
+map = grid.getPixelsFromImage("newmap.tiff")
 
 Exit = False
 x = 0
