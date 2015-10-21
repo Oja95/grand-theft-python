@@ -27,6 +27,8 @@ x = 0
 y = 0
 while not Exit:
     startTime = time.time()
+
+    # KEYBOARD INTERACTIONS
     for i in pygame.event.get():
         if i.type == pygame.QUIT:
             Exit = True
@@ -47,7 +49,9 @@ while not Exit:
     elif key[pygame.K_d]:
         x += speed
 
-
+    if(pygame.mouse.get_pressed()[0]):
+        #playerModel.shoot()
+        pass
 
     #Current render engine
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
@@ -64,12 +68,8 @@ while not Exit:
                 grid.drawGridTile(screen,textures.green,tile)
     # Player model ekraani keskele.
 
+    player.drawPlayerModel(displayInfo, playerModelImage, screen)
 
-    playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 30 ,30 )
-    #pygame.draw.rect(screen, textures.blue, playerModel)
-    #pygame.mouse.set_pos(940, 0)
-    rotatedImage = player.setPlayerModelDirection(playerModelImage, displayInfo)
-    screen.blit(rotatedImage, ((displayInfo.current_w // 2 - 15), (displayInfo.current_h // 2 -15)) )
     pygame.display.flip()
 
     endTime = time.time()

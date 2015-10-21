@@ -5,7 +5,7 @@ def getVectorLenght(vector):
     return math.sqrt((vector[0] ** 2) + (vector[1] ** 2))
 
 
-def setPlayerModelDirection(image, displayInfo):
+def getPlayerModelDirection(image, displayInfo):
     mousePos = pygame.mouse.get_pos()
     playerModelAsukoht = [(displayInfo.current_w // 2 -15), (displayInfo.current_h // 2 - 15)]
     yAxis = [displayInfo.current_w // 2 -15, displayInfo.current_h-1]
@@ -24,7 +24,10 @@ def setPlayerModelDirection(image, displayInfo):
     return pygame.transform.rotate(image, angle)
 
 
-# Playermodel keskkoht koordinaadid: 785 435
 #pygame.init()
 #dispinf = pygame.display.Info()
 #setPlayerModelDirection(0, dispinf)
+def drawPlayerModel(displayInfo, playerModelImage, screen):
+    playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 30 ,30 )
+    rotatedImage = getPlayerModelDirection(playerModelImage, displayInfo)
+    screen.blit(rotatedImage, ((displayInfo.current_w // 2 - 15), (displayInfo.current_h // 2 -15)) )
