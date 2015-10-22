@@ -28,6 +28,11 @@ def drawMap(displayInfo,screen,map,px,py):
             Y = ((j-2) * grid.tileSize) - py % grid.tileSize
             tile = grid.genTile(X,Y,grid.tileSize)
             try:
-                grid.drawGridTile(screen,map[i + px//grid.tileSize][j + py//grid.tileSize],tile)
+                mapx = i + px//grid.tileSize
+                mapy = j + py//grid.tileSize
+                if mapx >= 0 and mapy >= 0:
+                    grid.drawGridTile(screen,map[mapy][mapx],tile)
+                else:
+                    grid.drawGridTile(screen,textures.purple,tile)
             except:
                 grid.drawGridTile(screen,textures.purple,tile)
