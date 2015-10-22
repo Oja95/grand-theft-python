@@ -1,10 +1,9 @@
 import pygame
-import sys
 import textures
-import random
 import grid
 import time
 import render
+import player
 
 
 screen,displayInfo = render.renderInit()
@@ -14,6 +13,8 @@ print(displayInfo.current_w,displayInfo.current_h)
 
 #checkers = grid.genCheckers()
 map = grid.getPixelsFromImage("newmap.tiff")
+
+playerModelImage = pygame.image.load("playermodel.tif")
 
 Exit = False
 x = 0
@@ -30,7 +31,7 @@ while not Exit:
                 pygame.display.toggle_fullscreen()
 
     key = pygame.key.get_pressed()
-    speed = 30
+    speed = 5
     if key[pygame.K_w]:
         y -= speed
     elif key[pygame.K_s]:
@@ -41,7 +42,14 @@ while not Exit:
         x += speed
 
     render.drawMap(displayInfo,screen,map,x,y)
-    pygame.draw.rect(screen, textures.blue, render.playerRect(displayInfo))
+
+    #player.drawPlayerModel(displayInfo, playerModelImage, screen)
+
+    playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 30 ,30 )
+    pygame.draw.rect(screen, textures.blue, playerModel)
+    rotatedImage = player.getPlayerModelDirection(playerModelImage, displayInfo)
+    screen.blit(rotatedImage, ((displayInfo.current_w // 2 - 15), (displayInfo.current_h // 2 -15)) )
+
     pygame.display.flip()
     endTime = time.time()
     print(1/(endTime-startTime))
