@@ -4,6 +4,13 @@ import math
 def getVectorLenght(vector):
     return math.sqrt((vector[0] ** 2) + (vector[1] ** 2))
 
+def rot_center(image, angle): # Rotateb imaget keskpunkti järgi
+    orig_rect = image.get_rect()
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = orig_rect.copy()
+    rot_rect.center = rot_image.get_rect().center
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image
 
 def getPlayerModelDirection(image, displayInfo):
     mousePos = pygame.mouse.get_pos()
@@ -21,12 +28,9 @@ def getPlayerModelDirection(image, displayInfo):
     angle = 180 - math.degrees(angle)
 
     if(mousePos[0] > displayInfo.current_w // 2 - 15): angle = -angle
-    return pygame.transform.rotate(image, angle)
+    return rot_center(image, angle)
 
 
-#pygame.init()
-#dispinf = pygame.display.Info()
-#setPlayerModelDirection(0, dispinf)
 def drawPlayerModel(displayInfo, playerModelImage, screen):
     playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 30 ,30 )
     rotatedImage = getPlayerModelDirection(playerModelImage, displayInfo)
