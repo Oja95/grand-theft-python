@@ -30,6 +30,8 @@ while not Exit:
                 Exit = True
             elif i.key == pygame.K_f:
                 pygame.display.toggle_fullscreen()
+        elif i.type == pygame.MOUSEBUTTONDOWN and i.button == 1: # 1 bullet per klikk
+            gameObjects.makeBullet(displayInfo)
 
     key = pygame.key.get_pressed()
     speed = 5
@@ -42,22 +44,28 @@ while not Exit:
     elif key[pygame.K_d]:
         x += speed
 
+    """ KUI AUTOMAATTULISTAMIST VAJA, HETKEL (RIDA 33) LASEB 1 KUUL PER KLIKK
+    if(pygame.mouse.get_pressed() == (1,0,0)):
+        gameObjects.makeBullet(displayInfo)
+    """
 
-    render.drawMap(displayInfo,screen,map,x,y)
+    mapRectList = render.drawMap(displayInfo,screen,map,x,y)
 
     # Alumised kaks rida näitab playermodeli rect'i for collision detections
     playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 30 ,30 )
     pygame.draw.rect(screen, textures.blue, playerModel)
-    # Player Model render
+
+    # Player Model(SPRITE) render
     player.drawPlayerModel(displayInfo, playerModelImage, screen)
 
-
-    if(pygame.mouse.get_pressed() == (1,0,0)):
-        gameObjects.makeBullet(displayInfo)
-
-
+    # BULLETS
     gameObjects.renderBullets(screen, displayInfo)
+    gameObjects.checkBulletCollision(mapRectList)
+
+    # UPDATE FRAME
     pygame.display.flip()
+
+    # FPS
     endTime = time.time()
     #print(1/(endTime-startTime))
 

@@ -9,7 +9,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.Surface([4, 4])
-        self.image.fill((255,0,0))
+        self.image.fill(textures.red)
 
         self.mouse_x, self.mouse_y = mouse[0], mouse[1]
         self.player = player
@@ -20,15 +20,27 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
 
-        speed = -20.
+        speed = -25
         distance = [self.mouse_x - self.player[0], self.mouse_y - self.player[1]]
         norm = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+        """ Kui tuleb exception float divide by 0
+        if(norm == 0):
+            direction = [distance[0] / 0.0001 , distance[1] / 0.0001]
+        else:
+            direction = [distance[0] / norm, distance[1] / norm]
+        """
         direction = [distance[0] / norm, distance[1] / norm]
         bullet_vector = [direction[0] * speed, direction[1] * speed]
         self.rect.x -= bullet_vector[0]
         self.rect.y -= bullet_vector[1]
 
 spriteList = pygame.sprite.Group()
+
+def checkBulletCollision(mapRectList):
+    for bullet in spriteList:
+        for rect, color in mapRectList:
+            if(rect.contains(bullet.rect) and color == [0, 18, 255]):
+                spriteList.remove(bullet)
 
 def makeBullet(displayInfo):
     bullet = Bullet(pygame.mouse.get_pos(), [displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15])

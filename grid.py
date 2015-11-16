@@ -11,7 +11,7 @@ def genTile(x,y,tileSize):
     tile = pygame.Rect(x,y,tileSize,tileSize)
     return tile
 def drawGridTile(screen,color,tile):
-    pygame.draw.rect(screen,color,tile)
+    return pygame.draw.rect(screen,color,tile)
 
 
 

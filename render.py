@@ -21,6 +21,9 @@ def playerRect(displayInfo):
 #py,px = player pos
 def drawMap(displayInfo,screen,map,px,py):
     #Current render engine
+
+    gridTileList = []  # Hoiab listis kõiki joonistatud map recte
+
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
         for j in range((displayInfo.current_h)//grid.tileSize + 4):
             #Tile coordinates
@@ -32,7 +35,9 @@ def drawMap(displayInfo,screen,map,px,py):
                 mapy = j + py//grid.tileSize
                 if mapx >= 0 and mapy >= 0:
                     grid.drawGridTile(screen,map[mapy][mapx],tile)
+                    gridTileList.append((tile, map[mapy][mapx]))
                 else:
                     grid.drawGridTile(screen,textures.purple,tile)
             except:
                 grid.drawGridTile(screen,textures.purple,tile)
+    return gridTileList
