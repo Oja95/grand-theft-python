@@ -27,9 +27,9 @@ def drawMap(displayInfo,screen,map,px,py):
     for i in range((displayInfo.current_w) // grid.tileSize + 4):
         for j in range((displayInfo.current_h)//grid.tileSize + 4):
             #Tile coordinates
-            X= ((i-2) * grid.tileSize) - px % grid.tileSize
+            X = ((i-2) * grid.tileSize) - px % grid.tileSize
             Y = ((j-2) * grid.tileSize) - py % grid.tileSize
-            tile = grid.genTile(X,Y,grid.tileSize)
+            tile = grid.genTile(X,Y,grid.tileSize)  # Teeb recti asukohta (X,Y) suurusega tileSize
             try:
                 mapx = i + px//grid.tileSize
                 mapy = j + py//grid.tileSize
