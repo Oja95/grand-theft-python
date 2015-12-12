@@ -62,6 +62,7 @@ while not Exit:
     gameObjects.renderBullets(screen, displayInfo)
     gameObjects.checkBulletCollision(mapRectList)
 
+
     # UPDATE FRAME
     pygame.display.flip()
 

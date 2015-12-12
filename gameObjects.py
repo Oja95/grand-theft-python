@@ -2,6 +2,20 @@ import textures
 import pygame
 import math
 
+
+class Mob(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.Surface([10,10])
+        self.image.fill(textures.blue)
+
+        self.rect = self.image.get_rect()
+        self.rect[0] = 240
+        self.rect[1] = 343
+
+
+
 class Bullet(pygame.sprite.Sprite):
 
     def __init__(self, mouse, player):
@@ -36,6 +50,8 @@ class Bullet(pygame.sprite.Sprite):
 
 spriteList = pygame.sprite.Group()
 
+# BULLET
+
 def checkBulletCollision(mapRectList):
     for bullet in spriteList:
         for rect, color in mapRectList:
@@ -52,6 +68,12 @@ def renderBullets(screen, displayInfo):
             spriteList.remove(sprite)
         sprite.update()
     spriteList.draw(screen)
+
+# MOB
+def makeMob():
+    mob = Mob()
+    spriteList.add(mob)
+
 
 
 

@@ -13,6 +13,7 @@ def rot_center(image, angle): # Rotateb imaget keskpunkti järgi
     return rot_image
 
 def getPlayerModelDirection(image, displayInfo):
+    # Muudab player modeli suunda vastavalt hiire asukohale.
     mousePos = pygame.mouse.get_pos()
     playerModelAsukoht = [(displayInfo.current_w // 2 -15), (displayInfo.current_h // 2 - 15)]
     yAxis = [displayInfo.current_w // 2 -15, displayInfo.current_h-1]
@@ -27,7 +28,7 @@ def getPlayerModelDirection(image, displayInfo):
     angle = math.acos(cosAngle)
     angle = 180 - math.degrees(angle)
 
-    if(mousePos[0] > displayInfo.current_w // 2 - 15): angle = -angle
+    if(mousePos[0] > displayInfo.current_w // 2 - 15): angle = -angle  # koosinus I ja IV veerand positiivne, II ja III negatiivne
     return rot_center(image, angle)
 
 
