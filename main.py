@@ -8,13 +8,11 @@ import gameObjects
 from random import randint
 
 
-screen,displayInfo = render.renderInit()
-# Monitor info:
+screen, displayInfo = render.renderInit()
 
-#checkers = grid.genCheckers()
-map = grid.getPixelsFromImage("newmap.tiff")
+map = grid.getPixelsFromImage("mapvol2.png")
 
-playerModelImage = pygame.image.load("playermodel.tif")
+playerModelImage = pygame.image.load("rsz_playermodel.png").convert_alpha()
 
 Exit = False
 x = 0
@@ -31,7 +29,7 @@ while not Exit:
                 Exit = True
             elif i.key == pygame.K_f:
                 pygame.display.toggle_fullscreen()
-        elif i.type == pygame.MOUSEBUTTONDOWN and i.button == 1: # 1 bullet per klikk
+        elif i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:  # 1 bullet per klikk
             gameObjects.makeBullet(displayInfo)
 
     key = pygame.key.get_pressed()
@@ -55,17 +53,17 @@ while not Exit:
     """
 
     # MAP RENDER
-    mapRectList = render.drawMap(displayInfo,screen,map,x,y)
+    mapRectList = render.drawMap(displayInfo, screen, map, x, y)
 
     # Alumised kaks rida näitab playermodeli rect'i for collision detections. Eemalda 2. rida laters
-    playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 30 ,30 )
-    pygame.draw.rect(screen, textures.blue, playerModel)
+    #playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 50 ,50 )
+    #pygame.draw.rect(screen, textures.blue, playerModel)
 
     # Player Model(SPRITE) render
     player.drawPlayerModel(displayInfo, playerModelImage, screen)
 
     # MOBS
-    i = randint(1,100)
+    i = randint(1, 100)
     if(i < 5):
         gameObjects.makeMob(displayInfo, 100)  # Generate mob, teine number on HP
 
@@ -75,7 +73,7 @@ while not Exit:
         print("Zombied sõid su ära. kek")
         pygame.quit()  # Ainuke võimalus, kuidas ta siia blokki jõuab on, kui tuleb float division by zero exception
         exit()
-        # Ehk siis kui playerimodeli ja mobi distance on 0
+        # Ehk siis kui playerimodeli ja mobi vahel distance on 0
 
     # BULLETS
     gameObjects.renderBullets(screen, displayInfo)
@@ -83,8 +81,6 @@ while not Exit:
 
     # MOB N BULLET COLLISION
     gameObjects.mobBulletCollision()
-
-
 
     # UPDATE FRAME
     pygame.display.flip()
@@ -94,3 +90,12 @@ while not Exit:
     #print(1/(endTime-startTime))
 
 pygame.quit()
+
+
+# TO DO
+# Zombied ei spawniks mapist väljas
+# Zombie rotate image vastavalt liikumissuunale
+# Levelid, kill counter, mäng mingu järjest raskemaks
+# map file
+# bullet sprite?
+# HP for player?

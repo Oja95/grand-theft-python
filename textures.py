@@ -1,5 +1,3 @@
-#Helper class for storing texture data, currently test color library
-
 #Colors-Värvid
 white = [255,255,255]
 black = [0,0,0,0]

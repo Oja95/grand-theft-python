@@ -2,8 +2,6 @@ import pygame
 import textures
 import grid
 
-
-
 def renderInit():
     pygame.init()
     displayInfo = pygame.display.Info()
@@ -12,7 +10,6 @@ def renderInit():
     screen.fill(textures.purple)
     pygame.display.flip()
     return screen,displayInfo
-
 
 def playerRect(displayInfo):
     # Player model ekraani keskele.
@@ -37,7 +34,7 @@ def drawMap(displayInfo,screen,map,px,py):
                     grid.drawGridTile(screen,map[mapy][mapx],tile)
                     gridTileList.append((tile, map[mapy][mapx]))
                 else:
-                    grid.drawGridTile(screen,textures.purple,tile)
+                    grid.drawGridTile(screen,textures.black,tile)
             except:
-                grid.drawGridTile(screen,textures.purple,tile)
+                grid.drawGridTile(screen,textures.black,tile)
     return gridTileList

@@ -29,10 +29,11 @@ def getPlayerModelDirection(image, displayInfo):
     angle = 180 - math.degrees(angle)
 
     if(mousePos[0] > displayInfo.current_w // 2 - 15): angle = -angle  # koosinus I ja IV veerand positiivne, II ja III negatiivne
+    angle += 90
     return rot_center(image, angle)
 
 
 def drawPlayerModel(displayInfo, playerModelImage, screen):
-    playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 30 ,30 )
+    playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 50 ,50 )
     rotatedImage = getPlayerModelDirection(playerModelImage, displayInfo)
     screen.blit(rotatedImage, ((displayInfo.current_w // 2 - 15), (displayInfo.current_h // 2 -15)) )

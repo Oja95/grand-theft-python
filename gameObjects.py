@@ -10,8 +10,9 @@ class Mob(pygame.sprite.Sprite):
 
         self.player = player  # Playermodeli asukoht, et mob teaks kuhu suunas liikuda.
 
-        self.image = pygame.Surface([30,30])
-        self.image.fill(textures.blue)
+        #self.image = pygame.Surface([30,30])
+        self.image = pygame.image.load("mob.png").convert_alpha()
+        #self.image.fill(textures.blue)
 
         self.health = health  # vastavalt levelile võib panna zombied tugevamaks.
 
@@ -136,7 +137,9 @@ def mobBulletCollision():
                 if(mob.health < 1):
                     mobList.remove(mob)
                 if(mob.health <= 50):
-                    mob.image.fill(textures.red)
+                    # Kui pihta saab, kuva teine sprite?
+                    #mob.image.fill(textures.red)
+                    pass
 
 
 
