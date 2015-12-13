@@ -1,5 +1,4 @@
 import pygame
-import textures
 import grid
 import time
 import render
@@ -10,15 +9,16 @@ from random import randint
 
 screen, displayInfo = render.renderInit()
 
-map = grid.getPixelsFromImage("mapvol2.png")
+map = grid.getPixelsFromImage("images/mapvol2.png")
 
-playerModelImage = pygame.image.load("rsz_playermodel.png").convert_alpha()
+playerModelImage = pygame.image.load("images/rsz_playermodel.png").convert_alpha()
+
+x = 0  # Initial map scroll position
+y = 0
+
+pygame.mouse.set_cursor(*pygame.cursors.broken_x)  # Muudab hiirekursori sihikulaadseks X täheks
 
 Exit = False
-x = 0
-y = 0
-spriteList = pygame.sprite.Group()
-
 while not Exit:
     startTime = time.time()
     for i in pygame.event.get():
@@ -29,8 +29,8 @@ while not Exit:
                 Exit = True
             elif i.key == pygame.K_f:
                 pygame.display.toggle_fullscreen()
-        elif i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:  # 1 bullet per klikk
-            gameObjects.makeBullet(displayInfo)
+        #elif i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:  # 1 bullet per klikk
+         #   gameObjects.makeBullet(displayInfo)
 
     key = pygame.key.get_pressed()
     speed = 5
@@ -47,10 +47,8 @@ while not Exit:
         x += speed
         gameObjects.mobOffset("x", -speed)
 
-    """ KUI AUTOMAATTULISTAMIST VAJA, HETKEL (RIDA 33) LASEB 1 KUUL PER KLIKK
     if(pygame.mouse.get_pressed() == (1,0,0)):
         gameObjects.makeBullet(displayInfo)
-    """
 
     # MAP RENDER
     mapRectList = render.drawMap(displayInfo, screen, map, x, y)
@@ -64,17 +62,18 @@ while not Exit:
 
     # MOBS
     i = randint(1, 100)
-    if(i < 5):
+    if(i < 40):  # SPAWNRATE. Hetkel 40% võimalus, et iga frame spawnib 1 zombie.
         gameObjects.makeMob(displayInfo, 100)  # Generate mob, teine number on HP
 
-    try:
-        gameObjects.renderMobs(screen, displayInfo)
+
+    gameObjects.renderMobs(screen, displayInfo)
+    """
     except:
         print("Zombied sõid su ära. kek")
         pygame.quit()  # Ainuke võimalus, kuidas ta siia blokki jõuab on, kui tuleb float division by zero exception
         exit()
         # Ehk siis kui playerimodeli ja mobi vahel distance on 0
-
+    """
     # BULLETS
     gameObjects.renderBullets(screen, displayInfo)
     gameObjects.checkBulletCollision(mapRectList)
@@ -94,8 +93,7 @@ pygame.quit()
 
 # TO DO
 # Zombied ei spawniks mapist väljas
-# Zombie rotate image vastavalt liikumissuunale
 # Levelid, kill counter, mäng mingu järjest raskemaks
 # map file
-# bullet sprite?
 # HP for player?
+# Mob - player collision

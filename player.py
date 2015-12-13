@@ -16,7 +16,7 @@ def getPlayerModelDirection(image, displayInfo):
     # Muudab player modeli suunda vastavalt hiire asukohale.
     mousePos = pygame.mouse.get_pos()
     playerModelAsukoht = [(displayInfo.current_w // 2 -15), (displayInfo.current_h // 2 - 15)]
-    yAxis = [displayInfo.current_w // 2 -15, displayInfo.current_h-1]
+    yAxis = [displayInfo.current_w // 2 -15, displayInfo.current_h-15]
 
     # Teha 2 tsooni. Vasak/parem. vasakul tsoonis positiivne, paremas negatiivne.
 
@@ -29,7 +29,7 @@ def getPlayerModelDirection(image, displayInfo):
     angle = 180 - math.degrees(angle)
 
     if(mousePos[0] > displayInfo.current_w // 2 - 15): angle = -angle  # koosinus I ja IV veerand positiivne, II ja III negatiivne
-    angle += 90
+    angle += 90  # Pilt on 90 kraadi nihkes.
     return rot_center(image, angle)
 
 

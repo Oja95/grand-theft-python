@@ -9,10 +9,10 @@ class Mob(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.player = player  # Playermodeli asukoht, et mob teaks kuhu suunas liikuda.
+        self.nurk = 90  # Init suund(kraadides)
 
-        #self.image = pygame.Surface([30,30])
-        self.image = pygame.image.load("mob.png").convert_alpha()
-        #self.image.fill(textures.blue)
+        self.image = pygame.image.load("images/mob.png").convert_alpha()
+        self.copy = self.image
 
         self.health = health  # vastavalt levelile võib panna zombied tugevamaks.
 
@@ -33,20 +33,29 @@ class Mob(pygame.sprite.Sprite):
             self.rect[1] = displayInfo.current_h - 30
 
     def moveTowardsPlayer(self):
-        speed = 1
+        speed = 2  # Kiirus min 2, sest 2 tundi debugimist ütleb nii
         distance = [self.rect[0] - self.player[0], self.rect[1] - self.player[1]]
         norm = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
-        """ Kui tuleb exception float divide by 0
-        if(norm == 0):
-            direction = [distance[0] / 0.0001 , distance[1] / 0.0001]
-        else:
-            direction = [distance[0] / norm, distance[1] / norm]
-        """
         direction = [distance[0] / norm, distance[1] / norm]
-        bullet_vector = [direction[0] * speed, direction[1] * speed]
-        self.rect.x -= bullet_vector[0]
-        self.rect.y -= bullet_vector[1]
+        mob_vector = [direction[0] * speed, direction[1] * speed]
+        self.rect.x -= mob_vector[0]
+        self.rect.y -= mob_vector[1]
+        self.image = pygame.transform.rotate(self.copy, self.getNurk())
 
+    # MOB SUUNA MUUTMINE VASTAVALT PLAYER MODEL ASUKOHALE
+    # Siin tuleb nüüd kõrgem matemaatika. Võrreldes playermodeli suuna muutmisele(oli sama pilt koguaeg, mille suunda
+    # muutsime koguaeg teatud nurga võrra), siis siin on nii, et suunda muutes, meil pildi nurk muutub koguaeg
+    # Ehk hoiame mälus eelmist nurka(init = 90), ja siis leiame iga frame jaoks nurga palju pöörama peame
+    # seejärel liidame/lahutame ja ongi magic
+
+    def getNurk(self):
+        diagonaal = math.sqrt(abs(self.rect.x - self.player[0]) ** 2 + abs(self.rect.y - self.player[1]) ** 2)
+        yPikkus = self.rect.x - self.player[0]
+        nurk = math.degrees(math.acos(yPikkus/diagonaal))
+        if(self.rect.y > self.player[1]):
+            return -nurk+180
+        else:  # NO IDEA KUIDAS VÕI MIKS SEE TÖÖTAB. hilisõhtused mõttelennud
+            return nurk+180
 
 class Bullet(pygame.sprite.Sprite):
 
@@ -55,7 +64,7 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.Surface([4, 4])
-        self.image.fill(textures.red)
+        self.image.fill(textures.white)
 
         self.mouse_x, self.mouse_y = mouse[0], mouse[1]
         self.player = player
@@ -68,15 +77,9 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
 
-        speed = -15
+        speed = -38
         distance = [self.mouse_x - self.player[0], self.mouse_y - self.player[1]]
         norm = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
-        """ Kui tuleb exception float divide by 0
-        if(norm == 0):
-            direction = [distance[0] / 0.0001 , distance[1] / 0.0001]
-        else:
-            direction = [distance[0] / norm, distance[1] / norm]
-        """
         if(norm == 0): norm = 0.01
         direction = [distance[0] / norm, distance[1] / norm]
         bullet_vector = [direction[0] * speed, direction[1] * speed]
@@ -112,7 +115,7 @@ def renderBullets(screen, displayInfo):
 # MOB
 # FOR FUCKS SAKES, spaghetti code
 def makeMob(displayInfo, health):
-    mob = Mob(displayInfo, [displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15], health)
+    mob = Mob(displayInfo, [displayInfo.current_w // 2 - 25, displayInfo.current_h // 2 - 25], health)
     mobList.add(mob)
 
 def renderMobs(screen, displayInfo):
@@ -140,6 +143,5 @@ def mobBulletCollision():
                     # Kui pihta saab, kuva teine sprite?
                     #mob.image.fill(textures.red)
                     pass
-
 
 

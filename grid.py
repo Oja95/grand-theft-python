@@ -3,7 +3,7 @@ import pygame
 import textures
 
 #Var tileSize hold the current tile size, used in rendering
-tileSize = 30
+tileSize = 27
 
 #Draws one grid tile at coordinates, on var=screen with color
 

@@ -16,7 +16,7 @@ def playerRect(displayInfo):
     return pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 30 ,30 )
 
 #py,px = player pos
-def drawMap(displayInfo,screen,map,px,py):
+def drawMap(displayInfo, screen, map, px, py):
     #Current render engine
 
     gridTileList = []  # Hoiab listis kõiki joonistatud map recte
