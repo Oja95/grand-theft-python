@@ -1,8 +1,7 @@
-import textures
 import pygame
+import textures
 import math
 from random import randint
-
 
 class Mob(pygame.sprite.Sprite):
     def __init__(self, displayInfo, player, health):
@@ -54,7 +53,7 @@ class Mob(pygame.sprite.Sprite):
         nurk = math.degrees(math.acos(yPikkus/diagonaal))
         if(self.rect.y > self.player[1]):
             return -nurk+180
-        else:  # NO IDEA KUIDAS VÕI MIKS SEE TÖÖTAB. hilisõhtused mõttelennud
+        else:  # NO IDEA KUIDAS VÕI MIKS SEE TÖÖTAB.
             return nurk+180
 
 class Bullet(pygame.sprite.Sprite):
@@ -89,17 +88,27 @@ class Bullet(pygame.sprite.Sprite):
     def mobCollision(self):
         pass
 
+class killCounter():
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count += 1
+
+    def output(self):
+        return self.count
+
+
 spriteList = pygame.sprite.Group()
 mobList = pygame.sprite.Group()
 
 # BULLET
 
-def checkBulletCollision(mapRectList):
+def checkBulletCollision(mapRectList):  # Bullet collision mapiga
     for bullet in spriteList:
         for rect, color in mapRectList:
             if(rect.contains(bullet.rect) and color == [0, 18, 255]):
                 spriteList.remove(bullet)
-
 
 def makeBullet(displayInfo):
     bullet = Bullet(pygame.mouse.get_pos(), [displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15])
@@ -113,7 +122,6 @@ def renderBullets(screen, displayInfo):
     spriteList.draw(screen)
 
 # MOB
-# FOR FUCKS SAKES, spaghetti code
 def makeMob(displayInfo, health):
     mob = Mob(displayInfo, [displayInfo.current_w // 2 - 25, displayInfo.current_h // 2 - 25], health)
     mobList.add(mob)
@@ -131,6 +139,8 @@ def mobOffset(direction, speed):
             mob.rect[0] += speed
 
 # MOB N BULLET COLLISION
+killCounter = killCounter()  # Palju zombiesid mõrvatud on
+
 def mobBulletCollision():
     for bullet in spriteList:
         for mob in mobList:
@@ -139,9 +149,9 @@ def mobBulletCollision():
                 mob.health -= bullet.damage
                 if(mob.health < 1):
                     mobList.remove(mob)
+                    killCounter.increment()
                 if(mob.health <= 50):
                     # Kui pihta saab, kuva teine sprite?
                     #mob.image.fill(textures.red)
                     pass
-
 

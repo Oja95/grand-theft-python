@@ -4,6 +4,7 @@ import time
 import render
 import player
 import gameObjects
+import launcher
 from random import randint
 
 
@@ -17,6 +18,8 @@ x = 0  # Initial map scroll position
 y = 0
 
 pygame.mouse.set_cursor(*pygame.cursors.broken_x)  # Muudab hiirekursori sihikulaadseks X täheks
+
+launcher.launcher(screen, displayInfo)
 
 Exit = False
 while not Exit:
@@ -65,15 +68,14 @@ while not Exit:
     if(i < 40):  # SPAWNRATE. Hetkel 40% võimalus, et iga frame spawnib 1 zombie.
         gameObjects.makeMob(displayInfo, 100)  # Generate mob, teine number on HP
 
-
-    gameObjects.renderMobs(screen, displayInfo)
-    """
+    try:
+        gameObjects.renderMobs(screen, displayInfo)
     except:
         print("Zombied sõid su ära. kek")
-        pygame.quit()  # Ainuke võimalus, kuidas ta siia blokki jõuab on, kui tuleb float division by zero exception
-        exit()
+        pygame.quit()
+        launcher.launcher(screen, displayInfo)
         # Ehk siis kui playerimodeli ja mobi vahel distance on 0
-    """
+
     # BULLETS
     gameObjects.renderBullets(screen, displayInfo)
     gameObjects.checkBulletCollision(mapRectList)
@@ -81,12 +83,19 @@ while not Exit:
     # MOB N BULLET COLLISION
     gameObjects.mobBulletCollision()
 
+    # PRINT SCORE/LEVEL/INFO
+    font = pygame.font.Font(None, 36)
+    text = font.render("MÕRVADE ARV: " + str(gameObjects.killCounter.output()), 1, (10, 10, 10))
+    textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9)
+    screen.blit(text, textpos)
+
     # UPDATE FRAME
     pygame.display.flip()
 
     # FPS
     endTime = time.time()
     #print(1/(endTime-startTime))
+
 
 pygame.quit()
 
