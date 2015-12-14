@@ -3,8 +3,9 @@ import textures
 import math
 from random import randint
 
+
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, displayInfo, player, health):
+    def __init__(self, displayInfo, player, health, screen):
         pygame.sprite.Sprite.__init__(self)
 
         self.player = player  # Playermodeli asukoht, et mob teaks kuhu suunas liikuda.
@@ -16,20 +17,21 @@ class Mob(pygame.sprite.Sprite):
         self.health = health  # vastavalt levelile võib panna zombied tugevamaks.
 
         self.rect = self.image.get_rect()
-        # Spawnime Mobi nii, et mob oleks 30 px äärest.
-        side = randint(0,3) # Mis küljele spawnib. 0-vasak, 1-parem,2-lagi,3-põhi
-        if(side == 0):
-            self.rect[0] = 0
-            self.rect[1] = randint(30, displayInfo.current_h-30)
-        if(side == 1):
-            self.rect[0] = displayInfo.current_w - 30
-            self.rect[1] = randint(30, displayInfo.current_h-30)
-        if(side == 2):
-            self.rect[0] = randint(30, displayInfo.current_w-30)
-            self.rect[1] = 0
-        if(side == 3):
-            self.rect[0] = randint(30, displayInfo.current_w-30)
-            self.rect[1] = displayInfo.current_h - 30
+        screen.set_at((0,0), (0,0,0,255))
+        while(screen.get_at((self.rect[0], self.rect[1])) == (0,0,0,255)):  # Ei lase mobil spawnida mapist välja
+            side = randint(0,3)
+            if(side == 0): # vasak
+                self.rect[0] = 0
+                self.rect[1] = randint(30, displayInfo.current_h-30)
+            if(side == 1): # top
+                self.rect[0] = randint(30, displayInfo.current_w-30)
+                self.rect[1] = 0
+            if(side == 2): # parem
+                self.rect[0] = displayInfo.current_w - 30
+                self.rect[1] = randint(30, displayInfo.current_h-30)
+            if(side == 3): # põhi
+                self.rect[0] = randint(30, displayInfo.current_w-30)
+                self.rect[1] = displayInfo.current_h - 30
 
     def moveTowardsPlayer(self):
         speed = 2  # Kiirus min 2, sest 2 tundi debugimist ütleb nii
@@ -98,6 +100,20 @@ class killCounter():
     def output(self):
         return self.count
 
+    def setToZero(self):
+        self.count = 0
+
+    def spawnrate(self):
+        # Funktsioon muudab vastavalt kill countile lineaarselt spawnrate.
+        # Kills = 0  ->  Spawnrate tõenäosus = 25/1000
+        # Kills = 1500 -> Spawnrate tõenäosus = 950/1000
+        return 37*self.count/60 + 25
+
+    def zombieHP(self):
+        # Funktsioon muudab vastavalt kill countile lineaarselt zombie HP.
+        # Kills = 0 -> HP = 100
+        # Kills = 1500 -> HP = 400
+        return self.count/5 + 100
 
 spriteList = pygame.sprite.Group()
 mobList = pygame.sprite.Group()
@@ -107,7 +123,7 @@ mobList = pygame.sprite.Group()
 def checkBulletCollision(mapRectList):  # Bullet collision mapiga
     for bullet in spriteList:
         for rect, color in mapRectList:
-            if(rect.contains(bullet.rect) and color == [0, 18, 255]):
+            if(rect.contains(bullet.rect) and color == [0, 0, 0]):  # [0,0,0] ehk siis must pixel RGB, on mapist väljas
                 spriteList.remove(bullet)
 
 def makeBullet(displayInfo):
@@ -122,8 +138,8 @@ def renderBullets(screen, displayInfo):
     spriteList.draw(screen)
 
 # MOB
-def makeMob(displayInfo, health):
-    mob = Mob(displayInfo, [displayInfo.current_w // 2 - 25, displayInfo.current_h // 2 - 25], health)
+def makeMob(displayInfo, health, mapRectList):
+    mob = Mob(displayInfo, [displayInfo.current_w // 2 - 25, displayInfo.current_h // 2 - 25], health, mapRectList)
     mobList.add(mob)
 
 def renderMobs(screen, displayInfo):
@@ -139,7 +155,7 @@ def mobOffset(direction, speed):
             mob.rect[0] += speed
 
 # MOB N BULLET COLLISION
-killCounter = killCounter()  # Palju zombiesid mõrvatud on
+killCounter = killCounter()
 
 def mobBulletCollision():
     for bullet in spriteList:
@@ -154,4 +170,8 @@ def mobBulletCollision():
                     # Kui pihta saab, kuva teine sprite?
                     #mob.image.fill(textures.red)
                     pass
+
+def murderAllZombies():
+    for mob in mobList:
+        mobList.remove(mob)
 

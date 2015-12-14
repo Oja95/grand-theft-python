@@ -37,3 +37,6 @@ def drawPlayerModel(displayInfo, playerModelImage, screen):
     playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 50 ,50 )
     rotatedImage = getPlayerModelDirection(playerModelImage, displayInfo)
     screen.blit(rotatedImage, ((displayInfo.current_w // 2 - 15), (displayInfo.current_h // 2 -15)) )
+    return playerModel
+
+# Note to self: me oleme complete retardid et me playerit classina ei teinud.

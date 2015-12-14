@@ -13,7 +13,7 @@ def renderInit():
 
 def playerRect(displayInfo):
     # Player model ekraani keskele.
-    return pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 30 ,30 )
+    return pygame.Rect(displayInfo.current_w // 2, displayInfo.current_h // 2, 30, 30)
 
 #py,px = player pos
 def drawMap(displayInfo, screen, map, px, py):
@@ -35,6 +35,8 @@ def drawMap(displayInfo, screen, map, px, py):
                     gridTileList.append((tile, map[mapy][mapx]))
                 else:
                     grid.drawGridTile(screen,textures.black,tile)
+                    gridTileList.append((tile, [0,0,0]))
             except:
                 grid.drawGridTile(screen,textures.black,tile)
+                gridTileList.append((tile,[0,0,0]))
     return gridTileList
