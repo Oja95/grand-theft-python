@@ -37,6 +37,7 @@ class Mob(pygame.sprite.Sprite):
         speed = 2  # Kiirus min 2, sest 2 tundi debugimist ütleb nii
         distance = [self.rect[0] - self.player[0], self.rect[1] - self.player[1]]
         norm = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
+        if(norm == 0): norm = 0.1  # Väldime divison by zero exceptionit, nasty hack
         direction = [distance[0] / norm, distance[1] / norm]
         mob_vector = [direction[0] * speed, direction[1] * speed]
         self.rect.x -= mob_vector[0]
@@ -52,6 +53,7 @@ class Mob(pygame.sprite.Sprite):
     def getNurk(self):
         diagonaal = math.sqrt(abs(self.rect.x - self.player[0]) ** 2 + abs(self.rect.y - self.player[1]) ** 2)
         yPikkus = self.rect.x - self.player[0]
+        if(diagonaal == 0): diagonaal = 0.1  # Väldime division by zero exceptionit. nasty hack
         nurk = math.degrees(math.acos(yPikkus/diagonaal))
         if(self.rect.y > self.player[1]):
             return -nurk+180
@@ -115,8 +117,24 @@ class killCounter():
         # Kills = 1500 -> HP = 400
         return self.count/5 + 100
 
-spriteList = pygame.sprite.Group()
-mobList = pygame.sprite.Group()
+
+class playerHP():
+    def __init__(self):
+        self.hp = 100
+
+    def getHit(self, damage):
+        self.hp -= damage
+
+    def setHP(self, hp):
+        self.hp = hp
+
+    def output(self):
+        return self.hp
+
+
+# Konteinerid, mis hoiavad mängu objekte
+spriteList = pygame.sprite.Group()  # Bulletid
+mobList = pygame.sprite.Group()  # Zombied
 
 # BULLET
 
@@ -138,8 +156,8 @@ def renderBullets(screen, displayInfo):
     spriteList.draw(screen)
 
 # MOB
-def makeMob(displayInfo, health, mapRectList):
-    mob = Mob(displayInfo, [displayInfo.current_w // 2 - 25, displayInfo.current_h // 2 - 25], health, mapRectList)
+def makeMob(displayInfo, health, screen):
+    mob = Mob(displayInfo, [displayInfo.current_w // 2 - 10, displayInfo.current_h // 2 - 10], health,  screen)
     mobList.add(mob)
 
 def renderMobs(screen, displayInfo):
@@ -174,4 +192,13 @@ def mobBulletCollision():
 def murderAllZombies():
     for mob in mobList:
         mobList.remove(mob)
+
+
+# MOB - PLAYER COLLISION  + DAMAGE TO PLAYER
+playerHP = playerHP()
+def playerMobCollision(playerModelRect):
+    for mob in mobList:
+        if(mob.rect.colliderect(playerModelRect)):
+            playerHP.getHit(1)
+
 

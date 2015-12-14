@@ -69,22 +69,23 @@ while not Exit:
 
     # Player Model(SPRITE) render
     playerModelRect = player.drawPlayerModel(displayInfo, playerModelImage, screen)
-    print(playerModelRect)
+
 
     # MOBS
     i = randint(1, 1000)
     if(i < gameObjects.killCounter.spawnrate()):  # SPAWNRATE. Tõenäosus, et iga frame spawnib 1 zombie.
         gameObjects.makeMob(displayInfo, 100, screen)  # Generate mob, teine number on HP
 
-    try:
-        gameObjects.renderMobs(screen, displayInfo)
-    except:
+    gameObjects.renderMobs(screen, displayInfo)
+
+    if(gameObjects.playerHP.hp <= 0):
         print("Zombied sõid su ära. kek")
         murderCount = gameObjects.killCounter.output()
         gameObjects.killCounter.setToZero()
+        gameObjects.playerHP.setHP(100)
         gameObjects.murderAllZombies()
         launcher.launcher(screen, displayInfo, murderCount, restart=True)
-        # Ehk siis kui playerimodeli ja mobi vahel distance on 0
+
 
     # BULLETS
     gameObjects.renderBullets(screen, displayInfo)
@@ -93,20 +94,30 @@ while not Exit:
     # MOB N BULLET COLLISION
     gameObjects.mobBulletCollision()
 
-    # PRINT SCORE/LEVEL/INFO
+    # PLAYER N MOB COLLISION
+    gameObjects.playerMobCollision(playerModelRect)
+
+
+    ### USER INTERFACE IN-GAME
+    # KILL COUNT
     font = pygame.font.Font(None, 36)
     text = font.render("MÕRVADE ARV: " + str(gameObjects.killCounter.output()), 1, (10, 10, 10))
     textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9)
     screen.blit(text, textpos)
 
+    # PLAYER HP
+    text = font.render("HEALTH: " + str(gameObjects.playerHP.output()), 1, (10, 10, 10))
+    textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9 + 30)
+    screen.blit(text, textpos)
+
     # LEVEL INFO
     text = font.render("SPAWNRATE: " + str(int(gameObjects.killCounter.spawnrate())), 1, (10, 10, 10))
-    textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9 + 30)
+    textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9 + 60)
     screen.blit(text, textpos)
 
     # ZOMBIE HP
     text = font.render("ZOMBIE HP: " + str(int(gameObjects.killCounter.zombieHP())), 1, (10, 10, 10))
-    textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9 + 60)
+    textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9 + 90)
     screen.blit(text, textpos)
 
     # UPDATE FRAME
@@ -122,5 +133,3 @@ pygame.quit()
 
 # TO DO
 # map file
-# HP for player?
-# Mob - player collision
