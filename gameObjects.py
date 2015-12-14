@@ -9,15 +9,16 @@ class Mob(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.player = player  # Playermodeli asukoht, et mob teaks kuhu suunas liikuda.
-        self.nurk = 90  # Init suund(kraadides)
+        self.nurk = 90  # Mob sprite on 90 kraadi nihkes.
 
         self.image = pygame.image.load("images/mob.png").convert_alpha()
-        self.copy = self.image
+        self.copy = self.image  # Teeme pildist koopia, et ei peaks originaalset pilti pöörama
 
-        self.health = health  # vastavalt levelile võib panna zombied tugevamaks.
+        self.health = health  # Vastavalt killcount'ile zombie HP suureneb
 
-        self.rect = self.image.get_rect()
-        screen.set_at((0,0), (0,0,0,255))
+        self.rect = self.image.get_rect()  # Zombie asukoht display'l
+
+        screen.set_at((0,0), (0,0,0,255))  # Nasty hack
         while(screen.get_at((self.rect[0], self.rect[1])) == (0,0,0,255)):  # Ei lase mobil spawnida mapist välja
             side = randint(0,3)
             if(side == 0): # vasak
@@ -136,7 +137,7 @@ class playerHP():
 spriteList = pygame.sprite.Group()  # Bulletid
 mobList = pygame.sprite.Group()  # Zombied
 
-# BULLET
+# BULLET FUNKTSIOONID
 
 def checkBulletCollision(mapRectList):  # Bullet collision mapiga
     for bullet in spriteList:
@@ -155,7 +156,8 @@ def renderBullets(screen, displayInfo):
         sprite.update()
     spriteList.draw(screen)
 
-# MOB
+# MOB FUNKTSIOONID
+
 def makeMob(displayInfo, health, screen):
     mob = Mob(displayInfo, [displayInfo.current_w // 2 - 10, displayInfo.current_h // 2 - 10], health,  screen)
     mobList.add(mob)
@@ -189,12 +191,13 @@ def mobBulletCollision():
                     #mob.image.fill(textures.red)
                     pass
 
+# FUNKTSIOON KAOTAB KÕIK ZOMBIE'D ÄRA
 def murderAllZombies():
     for mob in mobList:
         mobList.remove(mob)
 
 
-# MOB - PLAYER COLLISION  + DAMAGE TO PLAYER
+# MOB - PLAYER COLLISION + DAMAGE TO PLAYER
 playerHP = playerHP()
 def playerMobCollision(playerModelRect):
     for mob in mobList:

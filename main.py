@@ -34,15 +34,16 @@ while not Exit:
             elif i.key == pygame.K_f:
                 pygame.display.toggle_fullscreen()
         #elif i.type == pygame.MOUSEBUTTONDOWN and i.button == 1:  # 1 bullet per klikk
-        #    gameObjects.makeBullet(displayInfo)
+        #   gameObjects.makeBullet(displayInfo)
 
     # MAP RENDER
     mapRectList = render.drawMap(displayInfo, screen, map, x, y)
 
     key = pygame.key.get_pressed()
-    speed = 5
+
+    # PLAYER - MAP COLLISION DETECTION + MOVEMENT
+    speed = 5 # MOVEMENT SPEED
     if key[pygame.K_w]:
-        # Collision detection playeri ja mapi vahel
         # Kontrollitakse player modelist liikumissuuna poole jäävat piksli värvust. Kui piksel must, siis ei saa liikuda.
         if(screen.get_at((displayInfo.current_w // 2 + 10 , displayInfo.current_h // 2 - 18 )) != (0,0,0,255)):
             y -= speed
@@ -60,24 +61,23 @@ while not Exit:
             x += speed
             gameObjects.mobOffset("x", -speed)
 
+
+    # AUTOMAATTULISTAMINE
     if(pygame.mouse.get_pressed() == (1,0,0)):
         gameObjects.makeBullet(displayInfo)
 
-    # Alumised kaks rida näitab playermodeli rect'i for collision detections. Eemalda 2. rida laters
-    #playerModel = pygame.Rect(displayInfo.current_w // 2 - 15, displayInfo.current_h // 2 - 15, 50 ,50 )
-    #pygame.draw.rect(screen, textures.blue, playerModel)
-
-    # Player Model(SPRITE) render
+    # PLAYER MODEL (SPRITE) RENDER
     playerModelRect = player.drawPlayerModel(displayInfo, playerModelImage, screen)
 
-
-    # MOBS
+    # SPAWN MOBS
     i = randint(1, 1000)
     if(i < gameObjects.killCounter.spawnrate()):  # SPAWNRATE. Tõenäosus, et iga frame spawnib 1 zombie.
-        gameObjects.makeMob(displayInfo, 100, screen)  # Generate mob, teine number on HP
+        gameObjects.makeMob(displayInfo, gameObjects.killCounter.zombieHP(), screen)  # Generate mob, teine number on HP
 
+    # UPDATE MOB ASUKOHT
     gameObjects.renderMobs(screen, displayInfo)
 
+    # KUI PLAYER HP ALLA NULLI, MÄNG LÕPETAB JA VISKAB ETTE ALGSE MENÜÜ
     if(gameObjects.playerHP.hp <= 0):
         print("Zombied sõid su ära. kek")
         murderCount = gameObjects.killCounter.output()
@@ -87,7 +87,7 @@ while not Exit:
         launcher.launcher(screen, displayInfo, murderCount, restart=True)
 
 
-    # BULLETS
+    # DRAW BULLETS + CHECK COLLISION
     gameObjects.renderBullets(screen, displayInfo)
     gameObjects.checkBulletCollision(mapRectList)
 
@@ -119,6 +119,7 @@ while not Exit:
     text = font.render("ZOMBIE HP: " + str(int(gameObjects.killCounter.zombieHP())), 1, (10, 10, 10))
     textpos = text.get_rect(centerx=displayInfo.current_w*5/6, centery=displayInfo.current_h*1/9 + 90)
     screen.blit(text, textpos)
+    ### END OF USER INTERFACE IN-GAME
 
     # UPDATE FRAME
     pygame.display.flip()
@@ -133,3 +134,4 @@ pygame.quit()
 
 # TO DO
 # map file
+# Kuva fps ka User interfaces
