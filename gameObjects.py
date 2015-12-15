@@ -3,9 +3,51 @@ import textures
 import math
 from random import randint
 
+class healthPack(pygame.sprite.Sprite):
+
+    # Health pack pickup playerile. Annab HP'd, kui collideb
+
+    def __init__(self, screen, displayInfo):
+
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.image.load("images/healthpack.png").convert_alpha()
+        self.rect = self.image.get_rect()
+
+        self.hp = 25  # Kui palju HP annab
+
+        screen.set_at((0,0), (0,0,0,255))
+        while(screen.get_at((self.rect[0], self.rect[1])) == (0,0,0,255)):
+            # Määrame asukoha. Random spawn
+            self.rect[0] = randint(30, displayInfo.current_w - 30)
+            self.rect[1] = randint(30, displayInfo.current_h - 30)
+
+class Rifle(pygame.sprite.Sprite):
+
+    # Automaatrelv pick-up
+
+    def __init__(self, screen, displayInfo):
+
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.image.load("images/rifle.png").convert_alpha()
+        self.rect = self.image.get_rect()
+
+        self.bullets = 90  # Mitu kuuli automaatrelvaga lasta saad
+
+        screen.set_at((0,0), (0,0,0,255))
+        while(screen.get_at((self.rect[0], self.rect[1])) == (0,0,0,255)):
+            # Määrame asukoha. Random spawn
+            self.rect[0] = randint(30, displayInfo.current_w - 30)
+            self.rect[1] = randint(30, displayInfo.current_h - 30)
+
 
 class Mob(pygame.sprite.Sprite):
+
+    # Tekitab mob'i, liigub playeri suunas
+
     def __init__(self, displayInfo, player, health, screen):
+
         pygame.sprite.Sprite.__init__(self)
 
         self.player = player  # Playermodeli asukoht, et mob teaks kuhu suunas liikuda.
@@ -18,7 +60,7 @@ class Mob(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()  # Zombie asukoht display'l
 
-        screen.set_at((0,0), (0,0,0,255))  # Nasty hack
+        screen.set_at((0,0), (0,0,0,255))  # Nasty hack - Tiit seletab
         while(screen.get_at((self.rect[0], self.rect[1])) == (0,0,0,255)):  # Ei lase mobil spawnida mapist välja
             side = randint(0,3)
             if(side == 0): # vasak
@@ -81,7 +123,7 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
 
-        speed = -38
+        speed = -50
         distance = [self.mouse_x - self.player[0], self.mouse_y - self.player[1]]
         norm = math.sqrt(distance[0] ** 2 + distance[1] ** 2)
         if(norm == 0): norm = 0.01
@@ -90,8 +132,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x -= bullet_vector[0]
         self.rect.y -= bullet_vector[1]
 
-    def mobCollision(self):
-        pass
 
 class killCounter():
     def __init__(self):
@@ -122,6 +162,8 @@ class killCounter():
 class playerHP():
     def __init__(self):
         self.hp = 100
+        self.hasRifle = False
+        self.ammo = 0
 
     def getHit(self, damage):
         self.hp -= damage
@@ -132,10 +174,29 @@ class playerHP():
     def output(self):
         return self.hp
 
+    def getHeal(self, hp):
+        self.hp += hp
+
+    def giveRifle(self):
+        self.hasRifle = True
+
+    def giveAmmo(self, ammo):
+        self.ammo += ammo
+
+    def decrementAmmo(self):
+        self.ammo -= 1
+
+    def loseRifle(self):
+        self.hasRifle = False
+
+
+# Spaghetti code below this line
 
 # Konteinerid, mis hoiavad mängu objekte
 spriteList = pygame.sprite.Group()  # Bulletid
 mobList = pygame.sprite.Group()  # Zombied
+hpList = pygame.sprite.Group()  # HP Pack sprite group
+rifleList = pygame.sprite.Group()  # Rifle pickup group
 
 # BULLET FUNKTSIOONID
 
@@ -167,12 +228,24 @@ def renderMobs(screen, displayInfo):
         mob.moveTowardsPlayer()
     mobList.draw(screen)
 
-def mobOffset(direction, speed):
+def Offset(direction, speed):
     for mob in mobList:
         if(direction == "y"):
             mob.rect[1] += speed
         else:
             mob.rect[0] += speed
+
+    for hpPack in hpList:
+        if(direction == "y"):
+            hpPack.rect[1] += speed
+        else:
+            hpPack.rect[0] += speed
+
+    for rifle in rifleList:
+        if(direction == "y"):
+            rifle.rect[1] += speed
+        else:
+            rifle.rect[0] += speed
 
 # MOB N BULLET COLLISION
 killCounter = killCounter()
@@ -203,5 +276,41 @@ def playerMobCollision(playerModelRect):
     for mob in mobList:
         if(mob.rect.colliderect(playerModelRect)):
             playerHP.getHit(1)
+
+
+# HEALTHPACK SPAWN
+def createHpPack(screen, displayInfo):
+    hpPack = healthPack(screen, displayInfo)
+    hpList.add(hpPack)
+
+# RENDER HP PACK
+def renderHealthPacks(screen):
+    for hppack in hpList:
+        hppack.update()
+    hpList.draw(screen)
+
+# HP PACK - PLAYER COLLISION
+def playerHpCollision(playerModelRect):
+    for hppack in hpList:
+        if(hppack.rect.colliderect(playerModelRect)):
+            playerHP.getHeal(hppack.hp)
+            hpList.remove(hppack)
+
+# RIFLE PICKUP SPAWN
+def createRifle(screen, displayInfo):
+    rifle = Rifle(screen, displayInfo)
+    rifleList.add(rifle)
+
+def renderRiflePickup(screen):
+    for rifle in rifleList:
+        rifle.update()
+    rifleList.draw(screen)
+
+def playerRifleCollision(playerModelRect):
+    for rifle in rifleList:
+        if(rifle.rect.colliderect(playerModelRect)):
+            playerHP.giveRifle()
+            playerHP.giveAmmo(rifle.bullets)
+            rifleList.remove(rifle)
 
 
