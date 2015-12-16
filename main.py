@@ -20,13 +20,15 @@ playerModelImage = pygame.image.load("images/rsz_playermodel.png").convert_alpha
 # INIT SOUND
 pygame.mixer.init()
 gunshots = []
-gunshots.append(pygame.mixer.Sound("gunshot_10.wav"))
-gunshots.append(pygame.mixer.Sound("gunshot_04.wav"))
+gunshots.append(pygame.mixer.Sound("sounds/gunshot_10.wav"))
+gunshots.append(pygame.mixer.Sound("sounds/gunshot_04.wav"))
+akSound = pygame.mixer.Sound("sounds/ak.wav")
+akSoundLong = pygame.mixer.Sound("sounds/aklong.wav")
 # GUNSOUNDS PÄRIT LEHEL FREESPECIALEFFECTS
 # http://www.freespecialeffects.co.uk/pages/weapons.html
 
 # SOUNDTRACK: Thomas the dank engine :D
-pygame.mixer.music.load("aylmao.mp3")
+pygame.mixer.music.load("sounds/aylmao.mp3")
 pygame.mixer.music.play()
 
 x = 0  # Initial map scroll position
@@ -82,6 +84,11 @@ while not Exit:
         # AUTOMAATTULISTAMINE
         if(pygame.mouse.get_pressed() == (1,0,0)):
             gameObjects.makeBullet(displayInfo)
+            if(gameObjects.playerHP.ammo == 1):
+                pygame.mixer.stop()
+                akSoundLong.play()
+            else:
+                akSound.play()
             gameObjects.playerHP.decrementAmmo()
             if(gameObjects.playerHP.ammo < 1):
                 gameObjects.playerHP.loseRifle()
@@ -95,7 +102,7 @@ while not Exit:
         gameObjects.makeMob(displayInfo, gameObjects.killCounter.zombieHP(), screen)  # Generate mob, teine number on HP
 
     # SPAWN HP PACKS
-    i = randint(1, 200)
+    i = randint(1, 300)
     if(i == 1):
         gameObjects.createHpPack(screen, displayInfo)
 
@@ -185,8 +192,3 @@ while not Exit:
 
 
 pygame.quit()
-
-
-# TO DO
-# map file
-# Kuva fps ka User interfaces
