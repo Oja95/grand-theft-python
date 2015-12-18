@@ -38,19 +38,19 @@ class Option:
 
 def launcher(screen, displayInfo, murderCount=0, restart=False):
     menu_font = pygame.font.Font(None, 40)
-    options = [Option("Uus mäng", (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 - 200), menu_font, screen),
-               Option("Fullscreen", (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 - 150), menu_font, screen),
-               Option("Sulge", (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 - 100), menu_font, screen),
-               Option("WASD - movement", (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 + 50 ), menu_font, screen),
-               Option("F - ingame fullscreen toggle", (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 + 100), menu_font, screen),
-               Option("Esc - quit", (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 + 150), menu_font, screen)
+    options = [Option("Uus mäng", (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 - 200), menu_font, screen),
+               Option("Fullscreen", (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 - 150), menu_font, screen),
+               Option("Sulge", (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 - 100), menu_font, screen),
+               Option("WASD - movement", (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 + 50 ), menu_font, screen),
+               Option("F - ingame fullscreen toggle", (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 + 100), menu_font, screen),
+               Option("Esc - quit", (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 + 150), menu_font, screen)
                ]
     if(restart):
         status_font = pygame.font.Font(None, 60)
         options.append(Option("You dun' goofed m8. Zombied sõid su ära!", \
-                    (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 - 400), status_font, screen))
+                    (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 - 400), status_font, screen))
         options.append(Option("Mõrvatud zombiesid: "+ str(murderCount), \
-                    (displayInfo.current_w // 2 - 50, displayInfo.current_h // 2 - 350), status_font, screen))
+                    (displayInfo.current_w // 2 - 250, displayInfo.current_h // 2 - 350), status_font, screen))
     closed = False
     """
     menuImage = pygame.image.load("images/menu.png").convert()

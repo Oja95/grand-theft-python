@@ -7,7 +7,6 @@ import gameObjects
 import launcher
 from random import randint, choice
 
-
 screen, displayInfo = render.renderInit()
 
 map = grid.getPixelsFromImage("images/background.jpg")
